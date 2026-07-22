@@ -141,7 +141,7 @@ func normalizarTexto(value string) string {
 }
 
 func validarCrearEntrada(input CrearClienteEntrada) error {
-	if input.Nombres == "" || input.Apellidos == "" {
+	if input.Nombres == "" {
 		return ErrClienteInvalido
 	}
 	if !datosContactoValidos(input.Correo, input.Telefono) {
@@ -155,7 +155,7 @@ func validarCrearEntrada(input CrearClienteEntrada) error {
 }
 
 func validarActualizarEntrada(input ActualizarClienteEntrada) error {
-	if input.Nombres == "" || input.Apellidos == "" {
+	if input.Nombres == "" {
 		return ErrClienteInvalido
 	}
 	if !datosContactoValidos(input.Correo, input.Telefono) {

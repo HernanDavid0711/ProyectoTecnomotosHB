@@ -28,6 +28,7 @@ CREATE TABLE roles (
 CREATE TABLE usuarios (
   id BIGSERIAL PRIMARY KEY,
   rol_id BIGINT NOT NULL REFERENCES roles(id) ON DELETE RESTRICT,
+  nombre_usuario VARCHAR(80) NOT NULL UNIQUE,
   nombres VARCHAR(100) NOT NULL,
   apellidos VARCHAR(100) NOT NULL,
   correo VARCHAR(150) NOT NULL UNIQUE,
@@ -353,6 +354,7 @@ EXECUTE FUNCTION actualizar_columna_actualizado_en();
 -- =========================================================
 INSERT INTO roles (nombre, descripcion) VALUES
   ('administrador', 'Acceso total al sistema'),
+  ('empleado', 'Gestiona ordenes de trabajo asignadas'),
   ('mecanico', 'Gestiona diagnosticos y trabajos'),
   ('recepcion', 'Recibe motos y registra informacion');
 

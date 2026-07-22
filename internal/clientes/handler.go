@@ -17,12 +17,12 @@ func NewHandler(service *Service) *Handler {
 	return &Handler{service: service}
 }
 
-func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
-	mux.HandleFunc("GET /api/clientes", h.List)
-	mux.HandleFunc("POST /api/clientes", h.Create)
-	mux.HandleFunc("GET /api/clientes/{id}", h.GetByID)
-	mux.HandleFunc("PUT /api/clientes/{id}", h.Update)
-	mux.HandleFunc("DELETE /api/clientes/{id}", h.Delete)
+func (h *Handler) RegisterRoutes(mux *http.ServeMux, middlewares ...func(http.Handler) http.Handler) {
+	mux.Handle("GET /api/clientes", wrap(http.HandlerFunc(h.List), middlewares...))
+	mux.Handle("POST /api/clientes", wrap(http.HandlerFunc(h.Create), middlewares...))
+	mux.Handle("GET /api/clientes/{id}", wrap(http.HandlerFunc(h.GetByID), middlewares...))
+	mux.Handle("PUT /api/clientes/{id}", wrap(http.HandlerFunc(h.Update), middlewares...))
+	mux.Handle("DELETE /api/clientes/{id}", wrap(http.HandlerFunc(h.Delete), middlewares...))
 }
 
 func (h *Handler) List(w http.ResponseWriter, r *http.Request) {
@@ -54,7 +54,7 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 	cliente, err := h.service.Create(r.Context(), input)
 	if err != nil {
 		if errors.Is(err, ErrClienteInvalido) {
-			shared.WriteError(w, http.StatusBadRequest, "datos_invalidos", "nombres y apellidos son obligatorios; valida correo, telefono y documento")
+			shared.WriteError(w, http.StatusBadRequest, "datos_invalidos", "nombres es obligatorio; valida correo, telefono y documento")
 			return
 		}
 
@@ -154,4 +154,11 @@ func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
 	shared.WriteJSON(w, http.StatusOK, map[string]any{
 		"message": "cliente desactivado correctamente",
 	})
+}
+
+func wrap(handler http.Handler, middlewares ...func(http.Handler) http.Handler) http.Handler {
+	for i := len(middlewares) - 1; i >= 0; i-- {
+		handler = middlewares[i](handler)
+	}
+	return handler
 }

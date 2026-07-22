@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tecnomotos HB</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <main class="login-page" id="login-page">
+      <section class="brand-panel" aria-label="Tecnomotos HB">
+        <div class="brand-panel__inner">
+          <img class="brand-logo" src="./public/logo-principal.jpg" alt="Tecnomotos HB" />
+          <div class="brand-copy">
+            <p class="brand-kicker">Sistema operativo del taller</p>
+            <h1>Tecnomotos HB</h1>
+            <p>Gestiona clientes, motos, usuarios y ordenes de trabajo desde un solo punto de control.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="login-panel" aria-label="Inicio de sesion">
+        <form class="login-form" id="login-form">
+          <div class="form-heading">
+            <div class="form-icon" aria-hidden="true">HB</div>
+            <div>
+              <h2>Iniciar sesion</h2>
+              <p>Ingresa con tu usuario autorizado.</p>
+            </div>
+          </div>
+
+          <label class="field">
+            <span>Usuario o correo</span>
+            <div class="input-shell">
+              <span class="input-icon" aria-hidden="true">@</span>
+              <input
+                id="usuario"
+                name="usuario"
+                type="text"
+                autocomplete="email"
+                placeholder="admin"
+                required
+              />
+            </div>
+          </label>
+
+          <label class="field">
+            <span>Contrasena</span>
+            <div class="input-shell">
+              <span class="input-icon" aria-hidden="true">*</span>
+              <input
+                id="contrasena"
+                name="contrasena"
+                type="password"
+                autocomplete="current-password"
+                placeholder="Tu contrasena"
+                required
+              />
+              <button
+                class="icon-button"
+                id="toggle-password"
+                type="button"
+                aria-label="Mostrar contrasena"
+                title="Mostrar contrasena"
+              >
+                Ver
+              </button>
+            </div>
+          </label>
+
+          <p class="form-error" id="form-error" hidden></p>
+
+          <button class="submit-button" id="submit-button" type="submit">Entrar</button>
+        </form>
+      </section>
+    </main>
+
+    <main class="admin-app" id="admin-app" hidden>
+      <aside class="admin-sidebar" aria-label="Navegacion principal">
+        <div class="sidebar-brand">
+          <img src="./public/logo-principal.jpg" alt="Tecnomotos HB" />
+          <div>
+            <strong>Tecnomotos HB</strong>
+            <span id="sidebar-role-label">Panel administrador</span>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <button class="nav-item active" type="button" data-section="usuarios">
+            <span class="nav-icon" aria-hidden="true">U</span>
+            <span>Usuarios</span>
+          </button>
+          <button class="nav-item" type="button" data-section="ordenes">
+            <span class="nav-icon" aria-hidden="true">OT</span>
+            <span>Ordenes de trabajo</span>
+          </button>
+          <button class="nav-item" type="button" data-section="catalogos">
+            <span class="nav-icon" aria-hidden="true">C</span>
+            <span>Catalogos</span>
+          </button>
+          <button class="nav-item" type="button" data-section="empleados">
+            <span class="nav-icon" aria-hidden="true">E</span>
+            <span>Empleados</span>
+          </button>
+          <button class="nav-item" type="button" data-section="clientes">
+            <span class="nav-icon" aria-hidden="true">CL</span>
+            <span>Clientes</span>
+          </button>
+          <button class="nav-item" type="button" data-section="historial">
+            <span class="nav-icon" aria-hidden="true">HM</span>
+            <span>Historial de motocicletas</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-session">
+          <span id="admin-user-name">Administrador</span>
+          <small id="admin-user-role">administrador</small>
+          <button class="logout-button" id="logout-button" type="button">Cerrar sesion</button>
+        </div>
+      </aside>
+
+      <section class="admin-main">
+        <header class="admin-topbar">
+          <div>
+            <p class="brand-kicker">Administracion</p>
+            <h1 id="section-title">Usuarios</h1>
+          </div>
+          <div class="topbar-actions">
+            <span class="status-pill">API conectada</span>
+            <button class="primary-action" id="section-action" type="button">Nuevo usuario</button>
+          </div>
+        </header>
+
+        <section class="admin-content" id="admin-content"></section>
+      </section>
+    </main>
+
+    <script src="./src/app.js"></script>
+  </body>
+</html>

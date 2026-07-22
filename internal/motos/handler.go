@@ -17,13 +17,13 @@ func NewHandler(service *Service) *Handler {
 	return &Handler{service: service}
 }
 
-func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
-	mux.HandleFunc("GET /api/motos", h.List)
-	mux.HandleFunc("POST /api/motos", h.Create)
-	mux.HandleFunc("GET /api/motos/autocompletar", h.AutocompleteByPlaca)
-	mux.HandleFunc("GET /api/motos/por-placa/{placa}", h.GetByPlaca)
-	mux.HandleFunc("GET /api/motos/{id}", h.GetByID)
-	mux.HandleFunc("PUT /api/motos/{id}", h.Update)
+func (h *Handler) RegisterRoutes(mux *http.ServeMux, middlewares ...func(http.Handler) http.Handler) {
+	mux.Handle("GET /api/motos", wrap(http.HandlerFunc(h.List), middlewares...))
+	mux.Handle("POST /api/motos", wrap(http.HandlerFunc(h.Create), middlewares...))
+	mux.Handle("GET /api/motos/autocompletar", wrap(http.HandlerFunc(h.AutocompleteByPlaca), middlewares...))
+	mux.Handle("GET /api/motos/por-placa/{placa}", wrap(http.HandlerFunc(h.GetByPlaca), middlewares...))
+	mux.Handle("GET /api/motos/{id}", wrap(http.HandlerFunc(h.GetByID), middlewares...))
+	mux.Handle("PUT /api/motos/{id}", wrap(http.HandlerFunc(h.Update), middlewares...))
 }
 
 func (h *Handler) List(w http.ResponseWriter, r *http.Request) {
@@ -175,4 +175,11 @@ func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
 	shared.WriteJSON(w, http.StatusOK, map[string]any{
 		"data": moto,
 	})
+}
+
+func wrap(handler http.Handler, middlewares ...func(http.Handler) http.Handler) http.Handler {
+	for i := len(middlewares) - 1; i >= 0; i-- {
+		handler = middlewares[i](handler)
+	}
+	return handler
 }
